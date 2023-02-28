@@ -19,7 +19,7 @@
 
 ## Steps:
 
-### Step 1: Creating the VMs
+### ***Step 1: Creating the VMs***
 - Create a local folder called `Ansible`.
 - Open the folder in `Visual Studio Code` and create a `Vagrantfile`. For the creation of Vagrantfiles, you do not need to add any `.type` at the end of the file. This file becomes a `Vagrantfile` when the script is added to it. 
 - Copy the following configuration within your `Vagrantfile`:
@@ -158,7 +158,7 @@ cd ansible/
 - Happy days! We set up our `Ansible Controller` and we are ready to move forward into communicating with the other 2 VMs, which will be the Agen Nodes.
 
 
-### Step 2: Connecting our VMs with the `Ansible Controller` VM
+### ***Step 2: Connecting our VMs with the `Ansible Controller` VM***
 
 - First step will be to boot up our VMs by doing:
 ```
@@ -382,7 +382,7 @@ sudo ansible -m ping web
 ![](pictures/ping-success.PNG)
 
 ---
-### Ad-hoc commands and Playbook setup
+### ***Step 3: Configuring our VMs using Ansible `Ad-hoc commands` and `Playbooks`***
 
 - From this point onward, we will focus on setting up `Playbooks`, which will shows us the real power of `Ansible`. 
 - We will start easy by rechecking the status of the communication between the `Controller` and the `web` VM (`Agent node`).
