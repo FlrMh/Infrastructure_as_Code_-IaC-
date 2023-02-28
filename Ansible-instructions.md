@@ -1,5 +1,6 @@
 # Vagrant-Ansible
 
+
 ![](pictures/ansible-terraform-vagrant.PNG)
 
 - First of all, we all have Virtual Box on our local hosts, and we know how to use Vagrant.
@@ -155,3 +156,44 @@ cd ansible/
 # this confirms that we have an Ansible Controller set up
 ```
 - Happy days! We set up our `Ansible Controller` and we are ready to move forward into communicating with the other 2 VMs, which will be the Agen Nodes.
+
+
+### Step 2: Connecting our VMs with Ansible Controller VM
+
+- First step will be to boot up our VMs by doing:
+```
+vagrant up
+
+```
+- If your VMs are running as normal, we will now have to ssh into each machine individually (controller, web and db) and run the following commands to establish the conntection to the internet.
+```
+sudo apt-get update -y
+
+sudo apt-get upgrade -y
+```
+
+---
+
+### Possible blockers:
+- If you saved the state of the VMs before turning them off, you might encounter issues with ssh-ing into them.
+- For me, the issue has been that I am unable to ssh into the `db` VM via my local host. I can only access the shell of the VM from `Virtual Box`. This is due to missbehaviour of Vagrant when running `vagrant up`.
+- As `Vagrant` did not boot up my `db` VM, I had to start it manually from `virtual Box`.
+
+![](pictures/Capture.PNG)
+
+- This will automatically open the `Shell` terminal to interact with the VM. However, we need to `SSH` into the VM.
+- One option would be to run 
+
+```
+vagrant reload db
+```
+- However, in my instance this did not work either.
+- Another option would be to use the `Shell` terminal in Virtual Box for the `db` VM to run:
+```
+sudo apt-get update -y
+sudo apt-get upgrade -y
+```
+- Once the updates and upgrades are done, and the VM is up and running, attempt to run `vargarnt ssh db` from a `Git Bash` terminal. 
+- Even if we cannot `ssh` into the `db` VM via local host, the main point is to be able to `ssh` into the `db` VM via our `Controller` VM. So, if we can `ssh` in the`db` VM via the `Controller` VM, there should not be any issues for now.
+- However, there might be a need to run `vagrant destroy` and re-attempt the entire process so far.
+---
