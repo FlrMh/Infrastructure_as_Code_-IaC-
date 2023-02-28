@@ -158,13 +158,21 @@ cd ansible/
 - Happy days! We set up our `Ansible Controller` and we are ready to move forward into communicating with the other 2 VMs, which will be the Agen Nodes.
 
 
-### Step 2: Connecting our VMs with Ansible Controller VM
+### Step 2: Connecting our VMs with the `Ansible Controller` VM
 
 - First step will be to boot up our VMs by doing:
 ```
 vagrant up
 
 ```
+- Now, let`s make sure that all the machines are working by running :
+```
+vagrant status
+```
+
+![](pictures/vagrant-status.PNG)
+
+- You should see the above status (If you have the same issue as me, your `db` VM might not show up, which for now is okay).
 - If your VMs are running as normal, we will now have to ssh into each machine individually (controller, web and db) and run the following commands to establish the conntection to the internet.
 ```
 sudo apt-get update -y
@@ -197,3 +205,36 @@ sudo apt-get upgrade -y
 - Even if we cannot `ssh` into the `db` VM via local host, the main point is to be able to `ssh` into the `db` VM via our `Controller` VM. So, if we can `ssh` in the`db` VM via the `Controller` VM, there should not be any issues for now.
 - However, there might be a need to run `vagrant destroy` and re-attempt the entire process so far.
 ---
+- The purpose of the following steps is to establish the communication within the machines. So, we will need to add the ip addresses of the `Agent nodes` VMs so the controller can communicate with them. If the connection is established, this means that we can configure the `Agent nodes` without having to `ssh` into them from our local host and do everything manually.
+
+(Configurations within the `Controller` VM for the `Agent nodes` is done through something called `Playbooks`, which are written in `YAML` language -- playbooks are similar to the provision files we have done for the VMs previously.)
+
+- What we would like to do now, is to check if we have proper communication between the machines. This time we will try to use the `password` instead of `ssh`, which we will have to set up on our `Controller`. 
+- Run the following commands in a `Git Bash` terminal.
+```
+vagrant ssh controller
+cd /etc
+cd ansible/
+# the location where we have the `hosts` file
+```
+
+![](pictures/controller-ansible-files.PNG)
+- Within the `hosts` file, we need to add the IP addresses of the `Agent Nodes`. 
+- The purpose of these actions is to see if we can `ssh` into the `web` and `db` VMs via our `Controller`, which is officially a `Controller` due to us installing `Ansible` in it.
+- We need to now continue in the `Git Bash` terminal. 
+```
+ssh vagrant@192.168.33.10 #IP address of the web VM
+```
+- By running this command, the Controller will now send a request to the `web` VM to `SSH` in. 
+- We will be asked if we want the `web` VM to create an ssh key and store it to allow access to the `Controller`and we should say Yes.
+- There is a chance this process will fail and we will get `Aceess denied`, in which case we will need to go in the `hosts` file and fix the issue. 
+- It might be the case that you are simply asked for the password, and if you know the password, the process might just work.
+- If prompted to instert the password, as my VMs are created locally via Vagrant, my password is `vagrant`, and I should be granted access to `SSH` into the `web` VM via the `Controller`. 
+```
+
+```
+---
+
+### Step 3: Configuring the `web` and `db` VMs via `Ansible Controller`
+
+![](pictures/config-web-sd.PNG)
