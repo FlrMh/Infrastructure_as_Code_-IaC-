@@ -561,7 +561,7 @@ shell: |
 ```
 - This playbook wil install us the dependencies required to be able to run our app. 
 
-4. As a last step, we will need a playbook that will run the commands that launch the app in our `web` VM:
+4. Next, we will need a playbook that will run the commands that launch the app in our `web` VM:
 ```
 sudo nano start-app-playbook.yml
 ```
@@ -571,7 +571,53 @@ sudo nano start-app-playbook.yml
 
 - This will allow us to access our app via the `web` VM IP address, followed by the port 3000 where our app is listening.
 
- 
+5. Lastly, we will need a playbook that will configure the reverse proxy for our `web` VM.
+```
+sudo nano reverse-proxy.yml
+```
+
+![](pictures/reverse-proxy.PNG)
+
+```
+#
+# create a playbook that configures the reverse proxy for our web machine
+
+# let`s add --- 3 dashes  to start a YAML file
+
+---
+
+# where do we want this playbook to run
+# add the name of the host
+- hosts: web
+# this will check the ping
+
+
+# find the facts
+  gather_facts: yes
+# yes can also be replaced with true
+
+
+# we need admin access
+  become: true
+
+# we have the admin acess, now we can add the instructions to perform the task
+# setting the reverse proxy on our web machine
+  tasks:
+  - name: Setting up the reverse proxy
+    shell: |
+      #!/bin/bash
+      sudo rm /etc/nginx/sites-available/default
+      sudo cp /home/app/app/reverse_proxy /etc/nginx/sites-available/default
+      sudo systemctl restart nginx
+
+# this commands will set up our revrse proxy
+
+```
+- If everything went well, we should be able to acces our app on the web browser, without specifying the port where the app is listening. 
+
+![](pictures/reverse-proxy-app-working.PNG)
+
+
  ---
 
 ### ***PLEASE NOTE***: It is not recommended to run the playbook with commands that run processes in the foreground (e.g. `node app.js`), as the moment you stop the run of the playbook you will be kicked out of the terminal, and the entire app will stop running. 
