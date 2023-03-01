@@ -565,12 +565,12 @@ shell: |
 ```
 sudo nano start-app-playbook.yml
 ```
-![](pictures/start-app-playbook.PNG)
+
+![](pictures/app-in-background.PNG)
 
 
 - This will allow us to access our app via the `web` VM IP address, followed by the port 3000 where our app is listening.
 
-![](pictures/app-in-background.PNG)
  
  ---
 
