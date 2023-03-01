@@ -570,12 +570,22 @@ sudo nano start-app-playbook.yml
 
 - This will allow us to access our app via the `web` VM IP address, followed by the port 3000 where our app is listening.
 
-![](pictures/app-working.PNG)
+![](pictures/app-in-background.PNG)
  
  ---
 
-### ***PLEASE NOTE***: It is not recommended to run the playbook with commands that run processes in the foreground, as the moment you stop the run of the playbook you will be kicked out of the terminal, and the entire app will stop running. 
+### ***PLEASE NOTE***: It is not recommended to run the playbook with commands that run processes in the foreground (e.g. `node app.js`), as the moment you stop the run of the playbook you will be kicked out of the terminal, and the entire app will stop running. 
 
 ![](pictures/ansible-kick-out.PNG)
 
+### ***Instead, try to use commands that will allow the app to run in the background, so you still have access to the terminal once you start up the app.
+```
+# e.g. 
+pm2 kill
+pm2 start app.js
+
+# or 
+
+nohup npm start 2>/dev/null 1>/dev/null&
+```
 ---
