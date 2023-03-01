@@ -578,8 +578,7 @@ sudo nano start-app-playbook.yml
 
 ![](pictures/ansible-kick-out.PNG)
 
-### ***Instead, try to use commands that will allow the app to run in the background, so you still have access to the terminal once you start up the app.
-```
+### ***Instead, try to use commands that will allow the app to run in the background, so you still have access to the terminal once you start up the app.***```
 # e.g. 
 pm2 kill
 pm2 start app.js
