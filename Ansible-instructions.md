@@ -635,3 +635,62 @@ pm2 start app.js
 nohup npm start 2>/dev/null 1>/dev/null&
 ```
 ---
+
+### Configuring the `db` VM
+
+- If you encounter the same issue as me (not being able to ssh within the `db` VM), a simple solution would be to destroy the machine individually and load it again.
+- Remember, being unable to ssh within a VM is a Vagrant issue. Therefore, when destroying the VM, make sure to **remove all the files associated with that VM** in order to be sure that the VM is being re-created fresh. 
+- Removing a VM can be done manually from the `Virtual Box` dashboard (Power Off -> Remove -> Remove all files) or bu running:
+```
+vagrant destroy db
+```
+- To launch the machine again, simply run:
+```
+vagrant up db
+```
+- Once the machine is up, make sure to do all the setups we did for the `web` VM (see above).
+- If you can ping the `db` VM, the connection has been successfully established. 
+- For the `db` VM we only need to create a playbook that installs `mongodb` and one that changes the mongodb config allowing connection from anywhere(0.0.0.0).
+
+![](pictures/mongodb-playbook.PNG)
+
+```
+# creating a playbook that will install and configure mongodb within our db VM
+
+---
+
+# specify where we want the playbook to run
+- hosts: mongodb
+
+
+# let`s get some facts
+
+  gather_facts: yes
+
+# admin access
+  become: true
+
+# once we have admin aceess, we need to specify the instructions for the task
+
+  tasks:
+  - name: Install and Configure Mongodb - most latest version
+    apt: pkg=mongodb state=present
+
+
+```
+- For the mongodb configuration, please attempt to set it up manually first, and then attempt to create a playbook!
+- Same for the next setups for the `web` where we create the env variable. Always attempt tasks first, and then automate it via playbooks¬
+
+---
+
+## Establishing the Hybrid infrastructure
+
+- This will mean that locally, we will only need to have the controller. (For the purpose of saving space within your local host, you can even remove the `db` and `web` VM. DO NOT REMOVE THE CONTROLLER.)
+
+---
+
+### Create an ansible Vault
+
+
+---
+
