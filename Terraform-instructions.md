@@ -132,3 +132,73 @@ terraform destroy
 
 ---
 
+---
+
+## Launchig a VPC and EC2 instances within it with Terraform
+
+- With `Terraform` we can launch all sorts of services with AWS, from `EC2` instances to `VPCs`.
+- For that reason, we will create a VPC and instances within this newly launched VPC, by also creating the required dependencies, such as `subnets`, `internet gateway`, `security groups` and `route tables`.
+- To achieve all this and more, the best practice is to use the `Terraform documentation` as it is extremely user friendly and can help us create any sort of service, by only copy & pasting the script structure and replacing the values with what is applicable in our case.
+- One thing to remember is, we can use `variables` for automation, instead of manually typing different values that might be used in multiple scenarios. 
+
+---
+### Example of variables:
+- Remember the previously created script for our EC2 instance using an `AMI`?
+
+![](pictures/main-folder.PNG)
+
+- Instead of specifying the `AMI` name every single time we want to use it, we can create a variable that can hold that specific ID for the `AMI`. 
+- In order to achieve that, we must create a new file within the same folder, named `variable.tf`.
+
+![](pictures/variable-file.PNG)
+
+- Now that we have created a variable that holds the specific id of the `AMI` we want to use when creating specific `EC2` instances, we can simply call that variable next time we want to use it in the configuration of an `EC2` instance.
+- To call a variable as a value, simply use `var.[name-of-the-variable]`.
+- To showcase, if we want to call the newly made variable in the previously used script bloce for an `EC2` instance, it will look like this:
+
+![](pictures/variable-in-ec2.PNG)
+
+---
+
+- For the creation of the entire `VPC` with all the respective dependencies, I will showcase the `main.tf` file block-by-block.
+
+1. `VPC` creation block:
+ 
+ ![](pictures/terra-VPC.PNG)
+
+ - As seen in the picture, I needed to specify the the service I am using (`"aws_vpc"`) and the name  I am giving it. 
+ - I also had to specify the `CIDR block` (`"10.0.0.0/16"`), and the `Tenancy type` (default).
+ - When ready, run:
+ ```
+terraform plan
+
+terraform apply
+ ```
+
+2. `Internet Gateway` creation block:
+
+![](pictures/terra-IG.PNG)
+
+- As I needed this `Internet Gateway` to be applied within my newly created `VPC`, I needed to specify the id of the VPC, which I took from the AWS VPC Dashboard, and created a variable with it (`"vpc_id"`), as you can see in the block of code when I am specifying the value of the vpc_id.
+
+3. `Public Subnet` creation block:
+
+![](pictures/terra-subnet.PNG)
+
+
+4. `Route Table` for the `Public Subnet` creation block:
+
+![](pictures/terra-RT.PNG)
+
+5. Association of `Public Subnet` to the `Route table` creation block:
+
+![](pictures/terra-association-rt-subnet.PNG)
+
+6. `Security group` for `Public subnet` creation block:
+
+![](pictures/terra-SG.PNG)
+
+7. `EC2` instance within the `VPC` creation block:
+
+![](pictures/terra-ec2.PNG)
+
