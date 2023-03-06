@@ -706,8 +706,91 @@ aws_secret_key = <value of your secret aws key>
 - Now you are ready to launch your `EC2` instance. 
 - the playbook for my `EC2` instance using an `AMI` looks like this:
 
-```
+```bash
+
+
+# AWS playbook
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  vars:
+    key_name: devops_tech201
+    region: eu-west-1
+    image: ami-0d5820667b1474236
+    id: "florina-tech201-app-playbook"
+    sec_group: "sg-0975f434ab8e7b09d"
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+
+    - name: Facts
+      block:
+
+      - name: Get instances facts
+        ec2_instance_facts:
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+          region: "{{ region }}"
+        register: result
+
+      - name: Instances ID
+        debug:
+          msg: "ID: {{ item.instance_id }} - State: {{ item.state.name }} - Public DNS: {{ item.public_dns_name }}"
+        loop: "{{ result.instances }}"
+
+      tags: always
+
+
+    - name: Provisioning EC2 instances
+      block:
+
+      - name: Upload public key to AWS
+        ec2_key:
+          name: "{{ key_name }}"
+          key_material: "{{ lookup('file', '~/.ssh/{{ key_name }}.pub') }}"
+          region: "{{ region }}"
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+
+
+      - name: Provision instance(s)
+        ec2:
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+          key_name: "{{ key_name }}"
+          id: "{{ id }}"
+          group_id: "{{ sec_group }}"
+          image: "{{ image }}"
+          instance_type: t2.micro
+          region: "{{ region }}"
+          wait: true
+          count: 1
+          instance_tags:
+            Name: florina-tech201-app-playbook
+
+      tags: ['never', 'create_ec2']
+
 
 ```
+- Now, if we run the playbook, it will launch an `EC2` instance for us.
+- Once the instance is launched, we must make sure that we add the IP address of the `EC2` instance in our `hosts` file within the `controller` VM so we can ssh into it from the controller.
+
+
+![](pictures/ec2-host.PNG)
+
+- Now, we should be able to ssh into the instance from our controller (using the `ssn` command provided on the `Connect` tab of the `EC2` instance) and run:
+
+```
+cd app
+
+npm install
+
+node app.js
+```
+- These commands will run the app, only if you do not already have `user data` on your EC2 instance `AMI` that will do it for you automatically as soon as you spin up the instance.
+
 ---
 
