@@ -3,6 +3,7 @@
 
 ![](pictures/ansible-terraform-vagrant.PNG)
 
+
 - First of all, we all have Virtual Box on our local hosts, and we know how to use Vagrant.
 - Compared to previous times, in order to be able to use Ansible, we will need to create 3 VMs. This is the minimum requirement for Ansible.
 - One of them will be an Ansible Controller, and the other 2 will be web (for nodejs) and db (for mongodb).
@@ -159,6 +160,9 @@ cd ansible/
 
 
 ### ***Step 2: Connecting our VMs with the `Ansible Controller` VM***
+
+
+![](pictures/1_8H4XYCNV-xamG0joz22apQ.png)
 
 - First step will be to boot up our VMs by doing:
 ```
