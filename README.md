@@ -14,6 +14,10 @@ Introduction to Infrastructure as Code (Iac)
 3. Reduce errors 
 4. Improve infrastructure consistency
 5. Eliminate configuration drift
+
+
+![](pictures/infrastructure-as-code.png)
+
 ### Configuration management
 
 - Configuration management is the process of identifying and tracking the state of a system's components and ensuring they are properly configured, updated, and maintained over time.

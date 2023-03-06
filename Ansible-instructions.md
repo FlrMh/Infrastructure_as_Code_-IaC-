@@ -691,6 +691,23 @@ vagrant up db
 
 ### Create an ansible Vault
 
+```
+sudo ansible-vault create my-vault.yml
+```
+- In this vault, we will need to add our AWS `Access` and `Secret` keys. 
+- First, you will be prompted to create a password and confirm it. 
+- Then, you will be prompted on a `vi` text editor to input your keys.
+- To input text in the `vi` text editor, you must press `i` until you can see `<<Insert>>` at the bottom of the page. Then you are ready to input your keys.
+```
+aws_aceess_key = <value of your aws access key>
+aws_secret_key = <value of your secret aws key>
+```
+- Once your keys are introduced, to save the file, `:wq!`.
+- Now you are ready to launch your `EC2` instance. 
+- the playbook for my `EC2` instance using an `AMI` looks like this:
 
+```
+
+```
 ---
 
